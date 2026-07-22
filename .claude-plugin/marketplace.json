@@ -1,0 +1,19 @@
+{
+  "name": "doit-optimaize",
+  "description": "성능 핫스팟·메모리·리팩터링·최적화 리뷰 스킬 모음. 근거 기반·동작 보존으로 안전하게 최적화한다.",
+  "owner": {
+    "name": "moreGet",
+    "url": "https://github.com/moreGet"
+  },
+  "plugins": [
+    {
+      "name": "optimize",
+      "description": "성능 핫스팟·메모리·리팩터링·최적화 리뷰 스킬 모음 (근거 기반·동작 보존).",
+      "version": "1.0.0",
+      "source": {
+        "source": "github",
+        "repo": "moreGet/doit-optimaize"
+      }
+    }
+  ]
+}
