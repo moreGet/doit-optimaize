@@ -1,0 +1,33 @@
+{
+  "name": "doit-optimaize",
+  "interface": {
+    "displayName": "doit-optimaize"
+  },
+  "plugins": [
+    {
+      "name": "optimize",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/moreGet/doit-optimaize.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "development",
+      "keywords": [
+        "optimization",
+        "performance",
+        "hotspot",
+        "memory",
+        "refactoring",
+        "code-review"
+      ],
+      "interface": {
+        "displayName": "doit-optimaize",
+        "shortDescription": "근거 기반·동작 보존 코드 최적화 스킬 모음",
+        "category": "development"
+      }
+    }
+  ]
+}
