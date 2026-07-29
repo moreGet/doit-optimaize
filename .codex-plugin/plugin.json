@@ -1,7 +1,7 @@
 {
   "name": "optimize",
-  "version": "1.0.0",
-  "description": "성능 핫스팟·메모리·리팩터링·최적화 리뷰 5종 스킬. 추정이 아닌 코드 사실(쿼리 수·O표기·자료구조)로 판단하고, 영향도 순으로 큰 것부터 고치며, 동작 100% 보존을 테스트로 검증합니다. 테스트·마이그레이션 파일은 명시적 지시 없이 건드리지 않습니다. 언어·프레임워크 비종속.",
+  "version": "1.1.0",
+  "description": "성능 핫스팟·메모리·리팩터링·최적화 리뷰·로그 레벨 배치·테스트 현행화·의존 방향 검사 8종 스킬. 추정이 아닌 코드 사실(쿼리 수·O표기·자료구조)로 판단하고, 영향도 순으로 큰 것부터 고치며, 동작 100% 보존을 테스트로 검증합니다. 로그와 테스트는 프로젝트의 기존 패턴을 먼저 학습해 그에 맞춥니다. 언어·프레임워크 비종속.",
   "keywords": [
     "optimization",
     "performance",
@@ -9,14 +9,20 @@
     "memory",
     "refactoring",
     "code-review",
+    "logging",
+    "testing",
+    "coverage",
+    "architecture",
+    "dependency-direction",
+    "layering",
     "behavior-preserving",
     "language-agnostic"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "doit-optimaize",
-    "shortDescription": "근거 기반·동작 보존 코드 최적화 스킬 모음",
-    "longDescription": "성능 병목·메모리·리팩터링을 코드 근거로 진단하고, 관측 가능한 동작과 공개 시그니처를 보존하며 안전하게 개선하는 5종 스킬(hotspot·memory·refactor·review·safe). 각 스킬은 [파일/함수/범위]를 인자로 받고, 비우면 현재 변경분(git diff)을 대상으로 합니다.",
+    "shortDescription": "근거 기반·동작 보존 코드 최적화 + 로깅·테스트 스킬 모음",
+    "longDescription": "성능 병목·메모리·리팩터링을 코드 근거로 진단하고 관측 가능한 동작과 공개 시그니처를 보존하며 안전하게 개선하는 5종(hotspot·memory·refactor·review·safe)에, 프로젝트의 기존 관용구에 맞춰 로그 레벨을 배치하는 logging과 테스트를 현행화하고 커버리지를 측정하는 test, 의존 방향·레이어 경계·순환 참조를 검사하는 arch를 더한 8종 스킬. 각 스킬은 [파일/함수/범위]를 인자로 받고, 비우면 현재 변경분(git diff)을 대상으로 합니다.",
     "developerName": "moreGet",
     "category": "development",
     "websiteURL": "https://github.com/moreGet/doit-optimaize"

@@ -21,11 +21,17 @@
         "hotspot",
         "memory",
         "refactoring",
-        "code-review"
+        "code-review",
+        "logging",
+        "testing",
+        "coverage",
+        "architecture",
+        "dependency-direction",
+        "layering"
       ],
       "interface": {
         "displayName": "doit-optimaize",
-        "shortDescription": "근거 기반·동작 보존 코드 최적화 스킬 모음",
+        "shortDescription": "근거 기반·동작 보존 코드 최적화 + 로깅·테스트 스킬 모음",
         "category": "development"
       }
     }

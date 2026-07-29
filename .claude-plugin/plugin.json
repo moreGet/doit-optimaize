@@ -1,9 +1,9 @@
 {
   "name": "optimize",
-  "description": "성능 핫스팟·메모리·리팩터링·최적화 리뷰를 근거 기반으로, 동작을 보존하며 안전하게 수행하는 스킬 모음. 언어·프레임워크 무관.",
-  "version": "1.0.0",
+  "description": "성능 핫스팟·메모리·리팩터링·최적화 리뷰에 더해 로그 레벨 배치·테스트 현행화/커버리지·의존 방향 검사까지, 근거 기반으로 동작을 보존하며 안전하게 수행하는 스킬 모음. 언어·프레임워크 무관.",
+  "version": "1.1.0",
   "author": {
     "name": "sunghyun"
   },
-  "keywords": ["performance", "optimization", "refactoring", "memory", "review", "n+1"]
+  "keywords": ["performance", "optimization", "refactoring", "memory", "review", "n+1", "logging", "testing", "coverage", "architecture", "dependency-direction", "layering"]
 }
