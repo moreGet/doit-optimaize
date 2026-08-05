@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<style>
+:root{
+  --bg:#F5EFE3; --bg2:#FAF6EC; --panel:#FFFCF4; --sunk:#EFE8D9; --hover:#F1E9D8;
+  --line:#E1D7C2; --line2:#EDE5D4;
+  --text:#2B2519; --text2:#6A6151; --text3:#9A9080;
+  --accent:oklch(0.50 0.12 44); --accent2:oklch(0.58 0.10 44); --accent-bg:oklch(0.94 0.035 58); --btn-fg:#FFFAF0;
+  --m-get:oklch(0.46 0.09 248); --m-get-bg:oklch(0.92 0.032 248);
+  --m-post:oklch(0.44 0.09 152); --m-post-bg:oklch(0.92 0.04 152);
+  --m-put:oklch(0.48 0.10 72); --m-put-bg:oklch(0.92 0.05 78);
+  --m-patch:oklch(0.46 0.09 305); --m-patch-bg:oklch(0.92 0.032 305);
+  --m-delete:oklch(0.48 0.13 26); --m-delete-bg:oklch(0.92 0.045 26);
+  --ok:oklch(0.44 0.10 152); --ok-bg:oklch(0.92 0.04 152);
+  --warn:oklch(0.50 0.11 76); --warn-bg:oklch(0.93 0.05 80);
+  --err:oklch(0.48 0.13 26); --err-bg:oklch(0.93 0.045 26);
+  --code-bg:#F1EAD8; --shadow:0 1px 2px rgba(60,45,20,.05), 0 10px 30px -16px rgba(60,45,20,.18);
+  /* 본문 최대 폭. 무제한으로 두면 넓은 화면에서 한 줄이 너무 길어져 읽기 어렵다.
+     목차 폭을 줄이면 본문이 이 상한까지 실제로 넓어진다. */
+  --doc-max:1400px;
+}
+:root[data-tone="clay"]{
+  --bg:#EAE3D6; --bg2:#F1EBE0; --panel:#F8F4EA; --sunk:#E1D9C9; --hover:#E4DCCB;
+  --line:#D5CBB8; --line2:#E2DACA;
+  --text:#242219; --text2:#615E4E; --text3:#8E887A;
+  --accent:oklch(0.46 0.07 178); --accent2:oklch(0.54 0.07 178); --accent-bg:oklch(0.92 0.028 178);
+  --code-bg:#E6DFD0;
+}
+:root[data-theme="dark"]{
+  --bg:#131110; --bg2:#191614; --panel:#1E1B17; --sunk:#221F19; --hover:#262218;
+  --line:#302B23; --line2:#262218;
+  --text:#EEE7D8; --text2:#A69C89; --text3:#7B7263;
+  --accent:oklch(0.80 0.11 62); --accent2:oklch(0.86 0.09 62); --accent-bg:oklch(0.30 0.05 62); --btn-fg:#191510;
+  --m-get:oklch(0.78 0.09 248); --m-get-bg:oklch(0.30 0.05 248);
+  --m-post:oklch(0.78 0.10 152); --m-post-bg:oklch(0.29 0.05 152);
+  --m-put:oklch(0.82 0.10 78); --m-put-bg:oklch(0.30 0.05 78);
+  --m-patch:oklch(0.78 0.09 305); --m-patch-bg:oklch(0.30 0.05 305);
+  --m-delete:oklch(0.72 0.13 26); --m-delete-bg:oklch(0.30 0.06 26);
+  --ok:oklch(0.78 0.10 152); --ok-bg:oklch(0.28 0.05 152);
+  --warn:oklch(0.82 0.10 78); --warn-bg:oklch(0.29 0.05 78);
+  --err:oklch(0.72 0.13 26); --err-bg:oklch(0.29 0.06 26);
+  --code-bg:#1B1814; --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 34px -18px rgba(0,0,0,.7);
+}
+:root[data-theme="dark"][data-tone="clay"]{ --accent:oklch(0.82 0.08 178); --accent2:oklch(0.88 0.07 178); --accent-bg:oklch(0.28 0.04 178); }
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',system-ui,-apple-system,'Malgun Gothic',sans-serif;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent2);text-decoration:underline}
+::selection{background:var(--accent-bg);color:var(--text)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-thumb{background:var(--line);border:3px solid transparent;background-clip:content-box;border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);background-clip:content-box}
+::-webkit-scrollbar-track{background:transparent}
+@keyframes pop{from{opacity:0;transform:translateY(-6px) scale(.985)}to{opacity:1;transform:none}}
+
+/* ── shell ── */
+.app{height:100vh;display:flex;flex-direction:column;overflow:hidden}
+header{flex:none;display:flex;align-items:center;gap:14px;row-gap:10px;flex-wrap:wrap;padding:12px 20px;background:var(--bg2);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.mark{width:30px;height:30px;border-radius:9px;background:var(--accent);display:flex;align-items:center;justify-content:center;color:var(--btn-fg);font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:13px}
+.bname{font-weight:600;font-size:15px;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blabel{font-size:11.5px;color:var(--text3);font-family:'IBM Plex Mono',ui-monospace,monospace;white-space:nowrap}
+.spacer{margin-left:auto}
+.btn{flex:none;height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+.btn:hover{background:var(--hover);color:var(--text)}
+.iconbtn{width:38px;padding:0;justify-content:center;font-size:15px}
+.seg{display:flex;padding:3px;border-radius:9px;background:var(--sunk);border:1px solid var(--line2)}
+.seg button{border:0;background:transparent;color:var(--text3);cursor:pointer;font-size:12px;font-weight:600;padding:5px 10px;border-radius:7px}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.searchbox{flex:1 1 260px;min-width:200px;max-width:420px;display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;background:var(--panel);overflow:hidden}
+.searchbox span{flex:none;padding:0 10px;font-size:13px;color:var(--text3)}
+.searchbox input{flex:1;min-width:0;padding:8px 10px 8px 0;border:0;background:transparent;color:var(--text);font-size:13.5px;outline:none}
+
+/* 본문(좌) | 리사이저 | 목차(우). 목차를 오른쪽에 두면 본문 왼쪽 가장자리가 고정돼
+   가로로 긴 표·코드블록을 읽을 때 시선 시작점이 흔들리지 않는다. */
+.body{flex:1;display:flex;min-height:0}
+main{flex:1;min-width:0;overflow-y:auto;scroll-behavior:smooth}
+.doc{max-width:var(--doc-max,1080px);margin:0 auto;padding:34px 40px 140px}
+
+aside{flex:none;width:var(--toc-w,320px);border-left:1px solid var(--line);background:var(--bg2);overflow-y:auto;padding:14px 10px 60px}
+aside.hidden{display:none}
+
+/* 드래그 핸들. 실제 잡히는 폭(10px)보다 보이는 선(1px)을 가늘게 둬서
+   레이아웃은 얇아 보이되 마우스로는 집기 쉽게 한다. */
+.resizer{flex:none;width:10px;margin:0 -5px;position:relative;z-index:5;cursor:col-resize;background:transparent}
+.resizer::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;transform:translateX(-50%);background:transparent;transition:background .12s}
+.resizer:hover::after,.resizer.dragging::after{background:var(--accent)}
+.resizer.hidden{display:none}
+body.resizing{cursor:col-resize;user-select:none}
+body.resizing main,body.resizing aside{pointer-events:none}
+
+/* ── toc ── */
+#toc{display:flex;flex-direction:column;gap:1px}
+.tocitem{display:flex;align-items:center;gap:7px;padding:5px 10px;border-radius:8px;color:var(--text2);font-size:13px;line-height:1.4;text-decoration:none}
+.tocitem:hover{background:var(--hover);color:var(--text);text-decoration:none}
+.tocitem.active{background:var(--accent-bg);color:var(--text);font-weight:600}
+.tocitem.lv2{font-weight:700;font-size:13.5px;color:var(--text);margin-top:12px}
+.tocitem.lv3{padding-left:20px;font-weight:600}
+.tocitem.lv4{padding-left:32px;font-size:12.5px}
+.tlabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tchip{flex:none;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 5px;border-radius:5px;min-width:44px;text-align:center}
+.tocitem.hide{display:none}
+
+/* ── content ── */
+h1,h2,h3,h4,h5,h6{line-height:1.35;letter-spacing:-0.012em;scroll-margin-top:20px;position:relative}
+.h2{font-size:26px;font-weight:700;margin:56px 0 18px;padding-bottom:12px;border-bottom:2px solid var(--line)}
+.h3{font-size:20px;font-weight:700;margin:40px 0 14px}
+.h4{font-size:16.5px;font-weight:650;margin:32px 0 12px;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:11px;box-shadow:var(--shadow);display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.h5,.h6{font-size:14.5px;font-weight:650;margin:22px 0 8px;color:var(--text2)}
+.hnum{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:var(--text3);font-weight:600}
+.anchor{position:absolute;left:-1.1em;top:0;color:var(--text3);opacity:0;font-weight:400;text-decoration:none}
+h2:hover .anchor,h3:hover .anchor{opacity:1}
+.h4 .anchor{position:static;opacity:0;order:99;margin-left:auto}
+.h4:hover .anchor{opacity:.6}
+p{margin:12px 0}
+.rule{border:0;border-top:1px solid var(--line2);margin:30px 0}
+ul,ol{margin:12px 0;padding-left:24px}
+li{margin:5px 0}
+li>ul,li>ol{margin:5px 0}
+code{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.875em;background:var(--code-bg);border:1px solid var(--line2);padding:1px 5px;border-radius:5px;white-space:nowrap}
+strong{font-weight:650}
+
+.chip{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.05em;padding:3px 8px;border-radius:6px}
+.m-get{color:var(--m-get);background:var(--m-get-bg)}
+.m-post{color:var(--m-post);background:var(--m-post-bg)}
+.m-put{color:var(--m-put);background:var(--m-put-bg)}
+.m-patch{color:var(--m-patch);background:var(--m-patch-bg)}
+.m-delete{color:var(--m-delete);background:var(--m-delete-bg)}
+
+.tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:11px;background:var(--panel);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+thead th{background:var(--sunk);color:var(--text2);font-weight:650;font-size:12.5px;letter-spacing:.01em;padding:10px 13px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+td{padding:9px 13px;border-bottom:1px solid var(--line2);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--hover)}
+td code{white-space:normal;word-break:break-word}
+
+.codewrap{margin:16px 0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--code-bg);box-shadow:var(--shadow)}
+.codebar{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:var(--sunk);border-bottom:1px solid var(--line2)}
+.lang{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3)}
+.copy{border:1px solid var(--line);background:var(--panel);color:var(--text2);cursor:pointer;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:6px}
+.copy:hover{background:var(--hover);color:var(--text)}
+pre.code{margin:0;padding:14px 16px;overflow-x:auto;font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.8px;line-height:1.62;color:var(--text)}
+pre.code code{background:none;border:0;padding:0;white-space:pre;font-size:inherit}
+
+.callout{margin:16px 0;padding:12px 16px;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;background:var(--panel);color:var(--text2)}
+.callout>*:first-child{margin-top:0}
+.callout>*:last-child{margin-bottom:0}
+.callout.warn{border-left-color:var(--warn);background:var(--warn-bg)}
+.callout.err{border-left-color:var(--err);background:var(--err-bg)}
+.callout.warn,.callout.err{color:var(--text)}
+
+#empty{display:none;padding:40px;text-align:center;color:var(--text3);font-size:14px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:9px 18px;border-radius:10px;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .18s;z-index:99}
+.toast.show{opacity:1}
+
+@media (max-width:1000px){
+  aside{position:fixed;inset:57px 0 0 0;width:100%!important;z-index:30}
+  .resizer{display:none}
+  .doc{padding:24px 18px 120px}
+}
+@media print{
+  header,aside,.resizer,.copy,.anchor{display:none!important}
+  .app,main{height:auto;overflow:visible}
+  .doc{max-width:none;padding:0}
+  .codewrap,.tablewrap,.h4{box-shadow:none}
+  thead th{position:static}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="mark">{{MARK}}</div>
+      <div style="min-width:0">
+        <div class="bname">{{TITLE}}</div>
+        <div class="blabel">{{SUBTITLE}}</div>
+      </div>
+    </div>
+    <div class="searchbox">
+      <span>🔍</span>
+      <input id="search" type="search" placeholder="목차 검색 (경로 · 제목)" autocomplete="off">
+    </div>
+    <div class="spacer"></div>
+    <div class="seg" id="tone">
+      <button data-tone="" aria-pressed="true" type="button">기본</button>
+      <button data-tone="clay" aria-pressed="false" type="button">clay</button>
+    </div>
+    <button class="btn iconbtn" id="theme" title="다크 / 라이트" type="button">◐</button>
+    <button class="btn" id="print" type="button">인쇄</button>
+    <button class="btn" id="navToggle" title="목차 패널 접기/펼치기" type="button" aria-expanded="true">목차 ☰</button>
+  </header>
+  <div class="body">
+    <main id="main"><div class="doc">{{CONTENT}}</div></main>
+    <div class="resizer" id="resizer" role="separator" aria-orientation="vertical"
+         tabindex="0" title="드래그해서 너비 조절 (더블클릭: 기본값)"></div>
+    <aside id="side">{{TOC}}<div id="empty">일치하는 항목이 없습니다.</div></aside>
+  </div>
+</div>
+<div class="toast" id="toast">복사했습니다</div>
+<script>
+(function () {
+  var root = document.documentElement;
+  var store = {
+    get: function (k, d) { try { return localStorage.getItem(k) || d; } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  // 테마·톤은 시스템 설정을 기본값으로 하되 사용자가 고르면 그 선택을 기억한다.
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme = store.get('spec.theme', prefersDark ? 'dark' : 'light');
+  var tone = store.get('spec.tone', '');
+  if (tone) root.dataset.tone = tone;
+  syncTone();
+
+  document.getElementById('theme').addEventListener('click', function () {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    store.set('spec.theme', root.dataset.theme);
+  });
+
+  document.getElementById('tone').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-tone]');
+    if (!b) return;
+    var t = b.dataset.tone;
+    if (t) root.dataset.tone = t; else root.removeAttribute('data-tone');
+    store.set('spec.tone', t);
+    syncTone();
+  });
+
+  function syncTone() {
+    var cur = root.dataset.tone || '';
+    document.querySelectorAll('#tone button').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.tone === cur));
+    });
+  }
+
+  document.getElementById('print').addEventListener('click', function () { window.print(); });
+
+  // ── 목차 패널 접기 ──
+  var side = document.getElementById('side');
+  var resizer = document.getElementById('resizer');
+  var navToggle = document.getElementById('navToggle');
+
+  function setNavOpen(open) {
+    side.classList.toggle('hidden', !open);
+    resizer.classList.toggle('hidden', !open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    store.set('spec.nav', open ? '1' : '0');
+  }
+  setNavOpen(store.get('spec.nav', '1') !== '0');
+  navToggle.addEventListener('click', function () {
+    setNavOpen(side.classList.contains('hidden'));
+  });
+
+  // ── 본문/목차 너비 조절 ──
+  // 목차가 오른쪽이므로 오른쪽 가장자리에서 포인터까지의 거리가 곧 목차 너비다.
+  // 본문(main)은 flex:1 이라 남는 폭을 가져간다 — 즉 목차를 줄이면 본문이 넓어진다.
+  var MIN_TOC = 180, MAX_TOC = 640, DEFAULT_TOC = 320;
+
+  function setTocWidth(px) {
+    var w = Math.max(MIN_TOC, Math.min(MAX_TOC, Math.round(px)));
+    document.documentElement.style.setProperty('--toc-w', w + 'px');
+    store.set('spec.tocw', String(w));
+    return w;
+  }
+  var savedWidth = parseInt(store.get('spec.tocw', ''), 10);
+  if (savedWidth) setTocWidth(savedWidth);
+
+  function onDrag(e) {
+    var x = e.touches ? e.touches[0].clientX : e.clientX;
+    setTocWidth(window.innerWidth - x);
+  }
+  function endDrag() {
+    document.body.classList.remove('resizing');
+    resizer.classList.remove('dragging');
+    window.removeEventListener('mousemove', onDrag);
+    window.removeEventListener('mouseup', endDrag);
+    window.removeEventListener('touchmove', onDrag);
+    window.removeEventListener('touchend', endDrag);
+  }
+  function startDrag(e) {
+    e.preventDefault();
+    document.body.classList.add('resizing');
+    resizer.classList.add('dragging');
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('touchmove', onDrag, { passive: false });
+    window.addEventListener('touchend', endDrag);
+  }
+  resizer.addEventListener('mousedown', startDrag);
+  resizer.addEventListener('touchstart', startDrag, { passive: false });
+  resizer.addEventListener('dblclick', function () { setTocWidth(DEFAULT_TOC); });
+
+  // 키보드로도 조절한다 — 드래그만 지원하면 포인터가 없는 환경에서 잠긴다.
+  resizer.addEventListener('keydown', function (e) {
+    var cur = side.getBoundingClientRect().width;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); setTocWidth(cur + 24); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); setTocWidth(cur - 24); }
+    else if (e.key === 'Home') { e.preventDefault(); setTocWidth(DEFAULT_TOC); }
+  });
+
+  // 목차 필터. h4(엔드포인트)가 걸리면 상위 h2/h3 도 함께 남겨 맥락을 유지한다.
+  var items = Array.prototype.slice.call(document.querySelectorAll('.tocitem'));
+  document.getElementById('search').addEventListener('input', function (e) {
+    var q = e.target.value.trim().toLowerCase();
+    if (!q) {
+      items.forEach(function (a) { a.classList.remove('hide'); });
+      document.getElementById('empty').style.display = 'none';
+      return;
+    }
+    var keep = new Set();
+    items.forEach(function (a, i) {
+      if (a.textContent.toLowerCase().indexOf(q) === -1) return;
+      keep.add(i);
+      var lv = a.classList.contains('lv4') ? 4 : a.classList.contains('lv3') ? 3 : 2;
+      for (var j = i - 1, want = lv - 1; j >= 0 && want >= 2; j--) {
+        var p = items[j];
+        var plv = p.classList.contains('lv4') ? 4 : p.classList.contains('lv3') ? 3 : 2;
+        if (plv === want) { keep.add(j); want--; }
+      }
+    });
+    items.forEach(function (a, i) { a.classList.toggle('hide', !keep.has(i)); });
+    document.getElementById('empty').style.display = keep.size ? 'none' : 'block';
+  });
+
+  // 코드 복사
+  var toast = document.getElementById('toast');
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.copy');
+    if (!b) return;
+    var pre = document.getElementById(b.dataset.code);
+    if (!pre) return;
+    var text = pre.textContent;
+    var done = function () {
+      toast.classList.add('show');
+      setTimeout(function () { toast.classList.remove('show'); }, 1200);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+    function fallback() {
+      // file:// 로 열면 clipboard API 가 막힌다 — 배포 형태가 그쪽이라 대체 경로가 필요하다.
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+  });
+
+  // 스크롤 스파이 — 화면 상단을 지난 마지막 제목을 활성화한다.
+  var slugs = {{TOCDATA}};
+  var links = {};
+  items.forEach(function (a) { links[a.dataset.slug] = a; });
+  var targets = slugs.map(function (s) { return document.getElementById(s); }).filter(Boolean);
+  var active = null;
+  var main = document.getElementById('main');
+  var ticking = false;
+  function spy() {
+    ticking = false;
+    var top = main.getBoundingClientRect().top + 90;
+    var cur = null;
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].getBoundingClientRect().top <= top) cur = targets[i]; else break;
+    }
+    if (!cur || cur === active) return;
+    if (active && links[active.id]) links[active.id].classList.remove('active');
+    active = cur;
+    var a = links[cur.id];
+    if (a) {
+      a.classList.add('active');
+      var ar = a.getBoundingClientRect(), sr = side.getBoundingClientRect();
+      if (ar.top < sr.top + 8 || ar.bottom > sr.bottom - 8) a.scrollIntoView({ block: 'center' });
+    }
+  }
+  main.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; requestAnimationFrame(spy); }
+  }, { passive: true });
+  spy();
+
+  // 좁은 화면에서는 목차가 전체를 덮으므로, 항목을 고르면 닫고 본문으로 보낸다.
+  // (여기서는 setNavOpen 을 쓰지 않는다 — 화면이 좁아 임시로 닫은 것을 취향으로 기억하면 안 된다.)
+  side.addEventListener('click', function (e) {
+    if (e.target.closest('.tocitem') && window.innerWidth <= 1000) {
+      side.classList.add('hidden');
+      resizer.classList.add('hidden');
+    }
+  });
+
+  // '/' 로 검색 포커스
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      document.getElementById('search').focus();
+    }
+  });
+})();
+</script>
+</body>
+</html>
