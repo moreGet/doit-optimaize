@@ -27,7 +27,11 @@
         "coverage",
         "architecture",
         "dependency-direction",
-        "layering"
+        "layering",
+        "api-documentation",
+        "openapi",
+        "rest-api",
+        "docs"
       ],
       "interface": {
         "displayName": "doit-optimaize",

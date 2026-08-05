@@ -8,8 +8,8 @@
   "plugins": [
     {
       "name": "optimize",
-      "description": "성능·메모리·리팩터링·리뷰·로깅·테스트·의존 방향 8종 스킬. 추정이 아닌 코드 사실(쿼리 수·O표기·자료구조)로 판단하고, 영향도 순으로 큰 것부터 고치며, 동작 100% 보존을 테스트로 검증합니다. 로그와 테스트는 프로젝트의 기존 패턴을 먼저 학습해 그에 맞춥니다. 최적화 스킬은 테스트·마이그레이션 파일을 명시적 지시 없이 건드리지 않습니다. 모든 스킬은 어느 명령·어떤 기준으로 무엇을 했는지를 결론 한 줄 + 표로 두괄식 보고합니다.",
-      "version": "1.1.0",
+      "description": "성능·메모리·리팩터링·리뷰·로깅·테스트·의존 방향·API 문서 9종 스킬. 추정이 아닌 코드 사실(쿼리 수·O표기·자료구조)로 판단하고, 영향도 순으로 큰 것부터 고치며, 동작 100% 보존을 테스트로 검증합니다. 로그와 테스트는 프로젝트의 기존 패턴을 먼저 학습해 그에 맞춥니다. 최적화 스킬은 테스트·마이그레이션 파일을 명시적 지시 없이 건드리지 않습니다. 모든 스킬은 어느 명령·어떤 기준으로 무엇을 했는지를 결론 한 줄 + 표로 두괄식 보고합니다.",
+      "version": "1.2.0",
       "author": {
         "name": "moreGet",
         "url": "https://github.com/moreGet"
@@ -30,7 +30,11 @@
         "dependency-direction",
         "layering",
         "behavior-preserving",
-        "language-agnostic"
+        "language-agnostic",
+        "api-documentation",
+        "openapi",
+        "rest-api",
+        "docs"
       ],
       "category": "development",
       "source": {
