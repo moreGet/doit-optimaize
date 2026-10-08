@@ -4,13 +4,13 @@
 
 **근거 기반으로, 동작을 보존하며, 안전하게** 코드를 다듬는 Claude Code · Codex 스킬 모음
 
-성능 핫스팟 · 메모리 · 리팩터링 · 최적화 리뷰 · 로그 레벨 배치 · 테스트 현행화 · 의존 방향 검사를 한곳에서.
+증상 분류(트리아지) · 성능 핫스팟 · 메모리 · 리팩터링 · 최적화 리뷰 · 로그 레벨 배치 · 테스트 현행화 · 의존 방향 검사 · API 명세 발행을 한곳에서.
 특정 언어나 프레임워크에 종속되지 않습니다.
 
 <br>
 
 ![license](https://img.shields.io/badge/license-MIT-blue)
-![skills](https://img.shields.io/badge/skills-8-green)
+![skills](https://img.shields.io/badge/skills-10-green)
 ![claude--code](https://img.shields.io/badge/Claude_Code-supported-8A2BE2)
 ![codex](https://img.shields.io/badge/Codex-supported-000000)
 
@@ -22,6 +22,7 @@
 
 | 스킬 | 호출 | 하는 일 |
 |------|------|---------|
+| 🩺 `triage` | `/optimize:triage` | **어디부터 볼지 분류만**(코드 수정 없이) — 증상을 재현·측정해 어느 스킬을 어떤 범위로 쓸지 추천 |
 | 🔥 `hotspot` | `/optimize:hotspot` | 성능 병목(N+1·중복 연산·비효율 자료구조)을 **영향도 순**으로 찾아 안전하게 최적화 |
 | 🧠 `memory` | `/optimize:memory` | 메모리·리소스 절감(전량 적재·누수·미해제 리소스), **트레이드오프 명시** |
 | 🧹 `refactor` | `/optimize:refactor` | 중복·복잡도 정리(함수 추출·조기 반환), **동작·시그니처 보존** |
@@ -33,9 +34,10 @@
 | 📑 `apispec` | `/optimize:apispec` | **API 명세 작성·발행** — 마크다운을 원본으로 두고 의존성 없는 단독 HTML 을 함께 생성, 두 산출물 동기화 강제 |
 
 > 각 스킬은 `[파일/함수/범위]`를 인자로 받으며, **비우면 현재 변경분(`git diff`)** 을 대상으로 합니다.
-> (`test`·`arch`는 예외로, 비우면 **프로젝트 전체**를 대상으로 합니다.)
+> (`test`·`arch`는 예외로, 비우면 **프로젝트 전체**를 대상으로 합니다. `triage`는 비우면 **증상을 먼저 묻습니다.**)
 
 ```bash
+/optimize:triage "주문 목록이 느림"   # 어디부터 볼지 분류만
 /optimize:hotspot src/main/java/com/example/OrderService.java
 /optimize:review           # 현재 변경분 진단
 /optimize:logging          # 변경분의 로그 레벨 점검·보강
@@ -63,7 +65,7 @@
 
 - **`실행` 칸은 받은 인자를 그대로** 적습니다. 인자 없이 호출됐다면 `(인자 없음 → git diff)`처럼 **실제 판단 기준**이 남습니다.
 - 표 밖 설명은 **결론 한 줄 + 불릿 3개 이내**. 과정 서술은 붙이지 않습니다.
-- 진단 전용 스킬(`review`·`arch`)은 `검증` 대신 `코드 변경: 없음`이 들어가고, 지적이 없으면 표 대신 **"지적 사항 없음" 한 줄**로 끝냅니다.
+- 진단·분류 전용 스킬(`triage`·`review`·`arch`)은 `검증` 대신 `코드 변경: 없음`이 들어가고, 지적이 없으면 표 대신 **"지적 사항 없음" 한 줄**로 끝냅니다.
 
 ---
 
